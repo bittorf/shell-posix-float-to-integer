@@ -18,7 +18,7 @@ float2integer()         # this works in every POSIX shell without external comma
     1) rest="${rest}00" ;;
     2) rest="${rest}0" ;;
     3) ;;
-    *) rest="${rest%"${rest#???}"}" ;;
+    *) rest="${rest%"${rest#???}"}" ;;  # remove overlong tail, keep 3 chars
   esac
 
   out="${front}${rest}"                 # 3.234 => 3234
