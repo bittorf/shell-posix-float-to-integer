@@ -1,4 +1,4 @@
-=== example call ===
+### example call
 
 ```
 #!/bin/sh
@@ -6,7 +6,7 @@ float2integer 4.035
 4035
 ```
 
-=== our handcrafted testsuite ===
+### our handcrafted testsuite
 
 ```
 user@box:~/software/shell-posix-float2integer$ . float2integer.sh
