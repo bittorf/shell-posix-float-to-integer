@@ -32,7 +32,7 @@ user@box:~/software/shell-posix-float2integer$ . float2integer.sh
 see file `f2i`
 
 ```
-x(){ local o f r;f=${1%.*};r=${1#*.};case ${#r} in 0|3);;1)r=${r}00;;2)r=${r}0;;*)r=${r%${r#???}};;esac;o=${f}$r;while case $o in 0[0-9]*):;;*)false;;esac;do o=${o#?};done;echo ${o:--1};}
+x(){ local o r f=${1%.*};r=${1#*.};case ${#r} in 0|3);;1)r=${r}00;;2)r=${r}0;;*)r=${r%${r#???}};esac;o=${f}$r;while case $o in 0[0-9]*):;;*)false;esac;do o=${o#?};done;echo ${o:--1};}
 x 4.1
 4100
 ```
