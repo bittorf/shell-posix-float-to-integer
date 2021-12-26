@@ -1,0 +1,23 @@
+#!/bin/sh
+
+x(){ local o f r;f=${1%.*};r=${1#*.};case ${#r} in 0|3);;1)r=${r}00;;2)r=${r}0;;*)r=${r%${r#???}};;esac;o=${f}$r;while case $o in 0[0-9]*):;;*)false;;esac;do o=${o#?};done;echo ${o:--1};}
+
+float2integer()
+{
+	printf '%s' "$1 => " && x $1
+}
+
+float2integer ""
+float2integer .0091234234
+float2integer 0
+float2integer 0.0
+float2integer 0.1
+float2integer 0.01
+float2integer 0.001
+float2integer 0.035267
+float2integer 4.100820
+float2integer 35.0001234234
+float2integer 35.0091234234
+float2integer 35.1
+float2integer 35.12
+float2integer 35.02

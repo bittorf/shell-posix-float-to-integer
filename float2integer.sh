@@ -38,6 +38,7 @@ float2integer()         # this works in every POSIX shell without external comma
 }
 
 float2integer ""
+float2integer .0091234234
 float2integer 0
 float2integer 0.0
 float2integer 0.1

@@ -12,6 +12,7 @@ float2integer 4.035
 user@box:~/software/shell-posix-float2integer$ . float2integer.sh
 
  =>  => front:  rest:  1stOUT:  => -1
+.0091234234 => .0091234234 => front:  rest: 009 1stOUT: 009 => 9
 0 => 0 => front: 0 rest: 000 1stOUT: 0000 => 0
 0.0 => 0.0 => front: 0 rest: 000 1stOUT: 0000 => 0
 0.1 => 0.1 => front: 0 rest: 100 1stOUT: 0100 => 100
@@ -24,4 +25,14 @@ user@box:~/software/shell-posix-float2integer$ . float2integer.sh
 35.1 => 35.1 => front: 35 rest: 100 1stOUT: 35100 => 35100
 35.12 => 35.12 => front: 35 rest: 120 1stOUT: 35120 => 35120
 35.02 => 35.02 => front: 35 rest: 020 1stOUT: 35020 => 35020
+```
+
+### a handy oneliner
+
+see file `f2i`
+
+```
+x(){ local o f r;f=${1%.*};r=${1#*.};case ${#r} in 0|3);;1)r=${r}00;;2)r=${r}0;;*)r=${r%${r#???}};;esac;o=${f}$r;while case $o in 0[0-9]*):;;*)false;;esac;do o=${o#?};done;echo ${o:--1};}
+x 4.1
+4100
 ```
