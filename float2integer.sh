@@ -37,16 +37,24 @@ float2integer()
 # functionally the same as above, but in a handy (183 bytes) oneliner format:
 x(){ local o r f=${1%.*};r=${1#*.};case ${#r} in 0|3);;1)r=${r}00;;2)r=${r}0;;*)r=${r%${r#???}};esac;o=${f}$r;while case $o in 0[0-9]*):;;*)false;esac;do o=${o#?};done;echo ${o:--1};}
 
+# just for comparing:
+use_bc()
+{
+  echo "( ${1:--0.001} * 1000 / 1 )" | bc
+}
+
 f()
 {
-	local float="$1"
-	local v1 v2
+  local float="$1"
+  local v1 v2 v3
+  v1="$( float2integer "$1" )"
+  v2="$( x "$1" )"
+  v3="$( use_bc "$1" )"
 
-	v1="$( float2integer "$1" )"
-	v2="$( x "$1" )"
+  test "$v1" = "$v2" || echo "ERROR for $float => $v2"
+  test "$v1" = "$v3" || echo "ERROR for $float => $v3"
 
-	test "$v1" = "$v2" || echo "ERROR for $float"
-	printf '%s\n' "$float => $v1"
+  printf '%s\n' "input: ${float:-<empty>} => $v1"
 }
 
 f ""
