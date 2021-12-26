@@ -1,13 +1,12 @@
 #!/bin/sh
 #
 # convert a time in seconds (e.g. 3.234) to an integer for milliseconds (e.g. 3234)
+# this works in every POSIX shell without external commands (e.g. bc/awk)
 
-float2integer()         # this works in every POSIX shell without external commands (e.g. bc/awk)
+float2integer()
 {
-  local float="$1"      # e.g. 0.035267
+  local float="$1"                      # e.g. 0.035267
   local out front rest
-
-  printf '%s' "$float => "
 
   front="${float%.*}"                   # value before comma
   rest="${float#*.}"                    # value after comma
@@ -23,31 +22,46 @@ float2integer()         # this works in every POSIX shell without external comma
 
   out="${front}${rest}"                 # 3.234 => 3234
 
-  printf '%s' "$float => front: $front rest: $rest 1stOUT: $out => "
-
   has_leading_zeroes()
   {
     case "$1" in 0[0-9]*) true ;; *) false ;; esac
   }
 
-  while has_leading_zeroes "$out"; do {
-    out=${out#?}  # strip 1st char
-  } done
+  while has_leading_zeroes "$out"; do
+    out=${out#?}  # remove first char
+  done
 
   printf '%s\n' "${out:--1}"
 }
 
-float2integer ""
-float2integer .0091234234
-float2integer 0
-float2integer 0.0
-float2integer 0.1
-float2integer 0.01
-float2integer 0.001
-float2integer 0.035267
-float2integer 4.100820
-float2integer 35.0001234234
-float2integer 35.0091234234
-float2integer 35.1
-float2integer 35.12
-float2integer 35.02
+# functionally the same as above, but in a handy (183 bytes) oneliner format:
+x(){ local o r f=${1%.*};r=${1#*.};case ${#r} in 0|3);;1)r=${r}00;;2)r=${r}0;;*)r=${r%${r#???}};esac;o=${f}$r;while case $o in 0[0-9]*):;;*)false;esac;do o=${o#?};done;echo ${o:--1};}
+
+f()
+{
+	local float="$1"
+	local v1 v2
+
+	v1="$( float2integer "$1" )"
+	v2="$( x "$1" )"
+
+	test "$v1" = "$v2" || echo "ERROR for $float"
+	printf '%s\n' "$float => $v1"
+}
+
+f ""
+f .0091234234
+f 0
+f 0.0
+f 0.1
+f 0.01
+f 0.001
+f 0.0001
+f 0.035267
+f 4.100820
+f 35.0001234234
+f 35.0091234234
+f 35.1
+f 35.12
+f 35.02
+f 0043.43
