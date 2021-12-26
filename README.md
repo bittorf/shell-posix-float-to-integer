@@ -9,22 +9,24 @@ float2integer 4.035
 ### our handcrafted testsuite
 
 ```
-user@box:~/software/shell-posix-float2integer$ . float2integer.sh
+$ ./float2integer.sh
 
- =>  => front:  rest:  1stOUT:  => -1
-.0091234234 => .0091234234 => front:  rest: 009 1stOUT: 009 => 9
-0 => 0 => front: 0 rest: 000 1stOUT: 0000 => 0
-0.0 => 0.0 => front: 0 rest: 000 1stOUT: 0000 => 0
-0.1 => 0.1 => front: 0 rest: 100 1stOUT: 0100 => 100
-0.01 => 0.01 => front: 0 rest: 010 1stOUT: 0010 => 10
-0.001 => 0.001 => front: 0 rest: 001 1stOUT: 0001 => 1
-0.035267 => 0.035267 => front: 0 rest: 035 1stOUT: 0035 => 35
-4.100820 => 4.100820 => front: 4 rest: 100 1stOUT: 4100 => 4100
-35.0001234234 => 35.0001234234 => front: 35 rest: 000 1stOUT: 35000 => 35000
-35.0091234234 => 35.0091234234 => front: 35 rest: 009 1stOUT: 35009 => 35009
-35.1 => 35.1 => front: 35 rest: 100 1stOUT: 35100 => 35100
-35.12 => 35.12 => front: 35 rest: 120 1stOUT: 35120 => 35120
-35.02 => 35.02 => front: 35 rest: 020 1stOUT: 35020 => 35020
+input: <empty> => -1
+input: .0091234234 => 9
+input: 0 => 0
+input: 0.0 => 0
+input: 0.1 => 100
+input: 0.01 => 10
+input: 0.001 => 1
+input: 0.0001 => 0
+input: 0.035267 => 35
+input: 4.100820 => 4100
+input: 35.0001234234 => 35000
+input: 35.0091234234 => 35009
+input: 35.1 => 35100
+input: 35.12 => 35120
+input: 35.02 => 35020
+input: 0043.43 => 43430
 ```
 
 ### a handy (but correct) oneliner in 183 bytes madness
