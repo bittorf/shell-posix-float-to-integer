@@ -27,9 +27,7 @@ user@box:~/software/shell-posix-float2integer$ . float2integer.sh
 35.02 => 35.02 => front: 35 rest: 020 1stOUT: 35020 => 35020
 ```
 
-### a handy oneliner
-
-see file `f2i`
+### a handy (but correct) oneliner in 183 bytes madness
 
 ```
 x(){ local o r f=${1%.*};r=${1#*.};case ${#r} in 0|3);;1)r=${r}00;;2)r=${r}0;;*)r=${r%${r#???}};esac;o=${f}$r;while case $o in 0[0-9]*):;;*)false;esac;do o=${o#?};done;echo ${o:--1};}
