@@ -11,6 +11,12 @@ float2integer()
   front="${float%.*}"                   # value before comma
   rest="${float#*.}"                    # value after comma
 
+  case "$float" in
+    '') ;;
+   *.*) ;;
+     *) rest=000 ;;			# input has no dot, but integer
+  esac
+
   # make sure we have exact 3 digits, e.g. 518666 => 518 or 1 => 100
   case "${#rest}" in
     0) ;;
@@ -34,8 +40,11 @@ float2integer()
   printf '%s\n' "${out:--1}"
 }
 
-# functionally the same as above, but in a handy (183 bytes) oneliner format:
-x(){ local o r f=${1%.*};r=${1#*.};case ${#r} in 0|3);;1)r=${r}00;;2)r=${r}0;;*)r=${r%${r#???}};esac;o=${f}$r;while case $o in 0[0-9]*):;;*)false;esac;do o=${o#?};done;echo ${o:--1};}
+# functionally the same as above, but in a handy (216 bytes) oneliner format:
+x(){ local o r f=${1%.*};r=${1#*.};case $1 in ''|*.*);;*)r=000;esac;case ${#r} in 1)r=${r}00;;2)r=${r}0;;0|3);;*)r=${r%${r#???}};esac;o=${f}$r;while case $o in 0[0-9]*):;;*)false;esac;do o=${o#?};done;echo ${o:--1};}
+
+# functionally the same as above, but does not accept plain integers as input (183 bytes):
+y(){ local o r f=${1%.*};r=${1#*.};case ${#r} in 0|3);;1)r=${r}00;;2)r=${r}0;;*)r=${r%${r#???}};esac;o=${f}$r;while case $o in 0[0-9]*):;;*)false;esac;do o=${o#?};done;echo ${o:--1};}
 
 # just for comparing:
 use_bc()
@@ -46,15 +55,17 @@ use_bc()
 f()
 {
   local float="$1"
-  local v1 v2 v3
-  v1="$( float2integer "$1" )"
-  v2="$( x "$1" )"
-  v3="$( use_bc "$1" )"
+  local f1 o1 o2 ref
+  f1="$( float2integer "$1" )"
+  o1="$( x "$1" )"
+  o2="$( y "$1" )"
+  ref="$( use_bc "$1" )"		# reference
 
-  test "$v1" = "$v2" || echo "ERROR for $float => $v2"
-  test "$v1" = "$v3" || echo "ERROR for $float => $v3"
+  test "$ref" = "$f1" || echo "ERROR with posix-long for $float => $f1"
+  test "$ref" = "$o1" || echo "ERROR with oneliner1 for $float => $o1"
+  test "$ref" = "$o2" || echo "ERROR with oneliner2 for $float => $o2"
 
-  printf '%s\n' "input: ${float:-<empty>} => $v1"
+  printf '%s\n' "input: ${float:-<empty>} => $ref"
 }
 
 f ""
@@ -73,3 +84,4 @@ f 35.1
 f 35.12
 f 35.02
 f 0043.43
+f 42

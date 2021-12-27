@@ -27,6 +27,7 @@ input: 35.1 => 35100
 input: 35.12 => 35120
 input: 35.02 => 35020
 input: 0043.43 => 43430
+input: 42 => 42000
 ```
 
 ### a handy (but correct) oneliner in 183 bytes madness
